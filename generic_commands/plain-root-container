@@ -1,0 +1,3 @@
+Commands to run a basic Ubuntu container on a cluster or specific host and get 
+
+kubectl --kubeconfig=<update>.yaml run -it <name such as "debug">  --restart=Never --image=ubuntu -n logging-system --overrides='{"kind":"Pod", "apiVersion":"v1", "spec": {"hostNetwork":true, "nodeName": "<specific node name; or remove this key value pair>"}}'
