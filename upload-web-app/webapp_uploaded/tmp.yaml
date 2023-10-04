@@ -1,0 +1,47 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: dashboard-ingressroute
+  namespace: kube-system
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`traefik.snc.aseclabs.com`) && (PathPrefix(`/`) || PathPrefix(`/api`))
+      kind: Rule
+      services:
+        - name: api@internal
+          kind: TraefikService
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: test-ingress
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`test.snc.aseclabs.com`)
+      kind: Rule
+      services:
+        - name: debug
+          port: 8080
+          scheme: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: debug
+  namespace: default
+spec:
+  # type: ExternalName
+  # externalName: upload-svc.default.svc.cluster.local
+  selector:
+    app: debug
+  ports:
+    - name: debug
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
