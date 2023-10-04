@@ -9,6 +9,9 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if request.method == 'POST':
+	xreal_ip = request.headers.get('X-Real-IP')
+        if real_ip:
+	    print(f"X-Real-IP: {real_ip}")
         file = request.files['file']
         if file:
             max_file_size = 512 * 512 * 512
