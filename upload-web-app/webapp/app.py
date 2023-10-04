@@ -1,5 +1,7 @@
 from flask import Flask, request, render_template
 import os
+import logging
+from logging import Formatter, FileHandler
 
 app = Flask(__name__)
 
@@ -9,9 +11,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if request.method == 'POST':
-        real_ip = request.headers.get('X-Real-IP')
-        if real_ip:
-            print(f"X-Real-IP: {real_ip}")
+        app.logger.setLevel(logging.INFO)
+        app.logger.info(request.headers)
         file = request.files['file']
         if file:
             max_file_size = 512 * 512 * 512
